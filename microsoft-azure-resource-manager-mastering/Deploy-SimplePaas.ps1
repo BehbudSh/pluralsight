@@ -1,6 +1,6 @@
 ﻿
 ### Define Deployment Variables
-{
+
 
 $resourceGroupName = 'contoso-simple-paas'
 $resourceProviderNamespace = 'Microsoft.Web'
@@ -12,28 +12,21 @@ $appNamePrefix = 'contoso'
 $appServicePlanName = $appNamePrefix + $randomString
 $webAppName = $appNamePrefix + $randomString
 
-}
-
 ### Get ARM Provider Locations
-{
 
 ((Get-AzureRmResourceProvider `
     -ProviderNamespace "$resourceProviderNamespace").ResourceTypes | `
     Where-Object {$_.ResourceTypeName -eq "$resourceTypeName"}).Locations | `
     Sort-Object
-}
 
 ### Create ARM Resource Group
-{
 
 New-AzureRmResourceGroup `
     -Name $resourceGroupName `
     -Location $resourceGroupLocation `
     -Verbose -Force
-}
 
 ### Create App Service Plan
-{
 
 $appServicePlan = New-AzureRmAppServicePlan `
     -ResourceGroupName $resourceGroupName `
@@ -42,10 +35,8 @@ $appServicePlan = New-AzureRmAppServicePlan `
     -Tier Standard `
     -WorkerSize Small `
     -Verbose
-}
 
 ### Create Web App
-{
 
 New-AzureRmWebApp `
     -ResourceGroupName $resourceGroupName `
@@ -53,4 +44,3 @@ New-AzureRmWebApp `
     -AppServicePlan $appServicePlan.ServerFarmWithRichSkuName `
     -Name $webAppName `
     -Verbose
-}

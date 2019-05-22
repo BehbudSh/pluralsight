@@ -1,6 +1,6 @@
 ﻿
 ### Define Deployment Variables
-{
+
 $resourceGroupName = 'contoso-simple-iaas'
 $resourceProviderNamespace = 'Microsoft.Network'
 $resourceTypeName = 'virtualNetworks'
@@ -17,26 +17,26 @@ $randomString = ([char[]]([char]'a'..[char]'z') + 0..9 | Sort-Object {Get-Random
 $storageAccountNamePrefix = 'storage'
 $storageAccountType = 'Standard_LRS'
 $storageAccountName = $storageAccountNamePrefix + ($storageAccountType.Replace('Standard_','')).ToLower() + $randomString
-}
+
 
 ### Get ARM Provider Locations
-{
+
 ((Get-AzureRmResourceProvider `
     -ProviderNamespace "$resourceProviderNamespace").ResourceTypes | `
     Where-Object {$_.ResourceTypeName -eq "$resourceTypeName"}).Locations | `
     Sort-Object
-}
+
 
 ### Create ARM Resource Group
-{
+
 $resourceGroup = New-AzureRmResourceGroup `
     -Name $resourceGroupName `
     -Location $resourceGroupLocation `
     -Verbose -Force
-}
+
 
 ### Create Virtual Network Subnets
-{
+
 $vNetSubnet1 = New-AzureRmVirtualNetworkSubnetConfig `
     -Name $vNetSubnet1Name `
     -AddressPrefix $vNetSubnet1Prefix `
@@ -46,10 +46,10 @@ $vNetSubnet2 = New-AzureRmVirtualNetworkSubnetConfig `
     -Name $vNetSubnet2Name `
     -AddressPrefix $vNetSubnet2Prefix `
     -Verbose
-}
+
 
 ### Create Virtual Network
-{
+
 $vNet = New-AzureRmVirtualNetwork `
     -ResourceGroupName $resourceGroup.ResourceGroupName `
     -Location $resourceGroup.Location `
@@ -57,14 +57,13 @@ $vNet = New-AzureRmVirtualNetwork `
     -AddressPrefix $vNetAddressPrefix `
     -Subnet $vNetSubnet1,$vNetSubnet2 `
     -Verbose -Force
-}
+
 
 ### Create Storage Account
-{
+
 $storageAccount = New-AzureRmStorageAccount `
     -ResourceGroupName $resourceGroup.ResourceGroupName `
     -Location $resourceGroup.Location `
     -Name $storageAccountName `
     -Type $storageAccountType `
     -Verbose
-}
